@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">payroll</string>
+    <string name="month_title">title</string>
+    <string name="month_date">date</string>
 </resources>

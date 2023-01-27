@@ -10,14 +10,14 @@ import java.util.*
 @Dao
 interface MonthDao {
     @Query("SELECT * FROM crime")
-    fun getMonths(): LiveData<List<Month>>
+    fun getMonths(): LiveData<List<MonthData>>
 
     @Query("SELECT * FROM crime WHERE id=(:id)")
-    fun getMonth(id: UUID): LiveData<Month?>
+    fun getMonth(id: UUID): LiveData<MonthData?>
 
     @Update
-    fun updateMonth(month: Month)
+    fun updateMonth(month: MonthData)
 
     @Insert
-    fun addMonth(month: Month)
+    fun addMonth(month: MonthData)
 }

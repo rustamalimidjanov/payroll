@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 
-@Database(entities = [Month::class], version = 1)
+@Database(entities = [MonthData::class], version = 1)
 @TypeConverters(MonthTypeConverters::class)
 abstract class MonthDatabase: RoomDatabase() {
 

@@ -8,12 +8,14 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), Callbacks {
     lateinit var binding: ActivityMainBinding
+    private val container = R.id.frame_container
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val container = R.id.frame_container
+
         val currentFragment = supportFragmentManager.findFragmentById(container)
 
         if (currentFragment == null) {
@@ -27,6 +29,12 @@ class MainActivity : AppCompatActivity(), Callbacks {
     }
 
     override fun onMonthSelected(id: UUID) {
+        val fragment = MonthFragment.newInstance(crimeId = id)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(container, fragment)
+            .addToBackStack(null)
+            .commit()
 
     }
 }

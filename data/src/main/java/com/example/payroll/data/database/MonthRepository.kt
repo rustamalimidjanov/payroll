@@ -20,17 +20,17 @@ class MonthRepository private constructor(context: Context) {
     private val executor = Executors.newSingleThreadExecutor()
     private val filesDir = context.applicationContext.filesDir
 
-    fun getMonths(): LiveData<List<Month>> = monthDao.getMonths()
+    fun getMonths(): LiveData<List<MonthData>> = monthDao.getMonths()
 
-    fun getMonth(id: UUID): LiveData<Month?> = monthDao.getMonth(id = id)
+    fun getMonth(id: UUID): LiveData<MonthData?> = monthDao.getMonth(id = id)
 
-    fun updateCrime(month: Month) {
+    fun updateCrime(month: MonthData) {
         executor.execute {
             monthDao.updateMonth(month = month)
         }
     }
 
-    fun addCrime(month: Month) {
+    fun addCrime(month: MonthData) {
         executor.execute {
             monthDao.addMonth(month = month)
         }

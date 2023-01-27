@@ -1,4 +1,4 @@
-package com.example.payroll.data.database
+package com.example.payroll.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

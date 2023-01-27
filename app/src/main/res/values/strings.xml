@@ -2,4 +2,7 @@
     <string name="app_name">payroll</string>
     <string name="month_title">title</string>
     <string name="month_date">date</string>
+    <string name="empty_text">This is empty layout, click to add new month</string>
+    <string name="empty_button">click me</string>
+    <string name="add_crime">add month</string>
 </resources>

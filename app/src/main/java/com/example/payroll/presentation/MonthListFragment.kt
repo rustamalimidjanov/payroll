@@ -3,21 +3,31 @@ package com.example.payroll.presentation
 import android.content.Context
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
 import com.example.payroll.R
-import com.example.payroll.data.database.MonthData
+import com.example.payroll.data.models.MonthData
 import com.example.payroll.databinding.FragmentMonthListBinding
 import com.example.payroll.databinding.ListItemMonthBinding
 
 class MonthListFragment: Fragment() {
     lateinit var binding: FragmentMonthListBinding
     private var callbacks: Callbacks? = null
+    private lateinit var monthRecyclerView: RecyclerView
+    private var adapter: MonthAdapter? = MonthAdapter(emptyList())
+//    private val clickButton: Button? = null
+//    private val recyclers = binding.monthRecyclerView
+//    private val emptyConst = binding.emptyView
+//    private val bottomButton = binding.addMonthButton
+    private val monthListViewModel: MonthListViewModel by lazy {
+        ViewModelProvider(this)[MonthListViewModel::class.java]
+    }
 
 
     override fun onAttach(context: Context) {
@@ -25,18 +35,35 @@ class MonthListFragment: Fragment() {
         callbacks = context as Callbacks?
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding = FragmentMonthListBinding.inflate(inflater, container, false)
+        monthRecyclerView =
+            binding.monthRecyclerView.findViewById(R.id.month_recycler_view) as RecyclerView
+        monthRecyclerView.layoutManager = LinearLayoutManager(context)
+        monthRecyclerView.adapter = adapter
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        monthListViewModel.crimeListLiveData.observe(
+            viewLifecycleOwner,
+            Observer { months ->
+                months?.let {
+                    updateUI(months = months)
+                }
+            }
+        )
 
 
     }
@@ -45,6 +72,38 @@ class MonthListFragment: Fragment() {
         super.onDetach()
         callbacks = null
     }
+
+
+    private fun updateUI(months: List<MonthData>) {
+        val clickButton = binding.clickButton
+        val recyclers = binding.monthRecyclerView
+        val emptyConst = binding.emptyView
+        val bottomButton = binding.addMonthButton
+        val month = MonthData()
+
+        if (months.isEmpty()) {
+            recyclers.visibility = View.INVISIBLE
+            emptyConst.visibility = View.VISIBLE
+            clickButton.setOnClickListener {
+                monthListViewModel.addMonth(month = month)
+                callbacks?.onMonthSelected(id = month.id)
+            }
+        } else {
+            recyclers.visibility = View.VISIBLE
+            emptyConst.visibility = View.INVISIBLE
+        }
+
+        if (months.size in 1..4) {
+            bottomButton.visibility = View.VISIBLE
+            bottomButton.setOnClickListener {
+                monthListViewModel.addMonth(month = month)
+                callbacks?.onMonthSelected(id = month.id)
+            }
+        }
+
+        (monthRecyclerView.adapter as MonthAdapter).submitList(months)
+    }
+
 
     companion object {
         fun newInstance(): MonthListFragment = MonthListFragment()

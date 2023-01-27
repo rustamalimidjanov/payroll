@@ -3,10 +3,11 @@ package com.example.payroll.data.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
+import com.example.payroll.data.models.MonthData
 import java.util.*
 import java.util.concurrent.Executors
 
-private const val DATABASE_NAME = "crime-database"
+private const val DATABASE_NAME = "month-database"
 
 class MonthRepository private constructor(context: Context) {
 
@@ -18,7 +19,6 @@ class MonthRepository private constructor(context: Context) {
 
     private val monthDao = database.monthDao()
     private val executor = Executors.newSingleThreadExecutor()
-    private val filesDir = context.applicationContext.filesDir
 
     fun getMonths(): LiveData<List<MonthData>> = monthDao.getMonths()
 
